@@ -16,12 +16,12 @@
       }),
       pull_requests: renderable(function(pull_requests) {
         return div(".pull-requests", function() {
-          var pull_request, _i, _len, _results;
+          var index, pull_request, _i, _len, _results;
           _results = [];
-          for (_i = 0, _len = pull_requests.length; _i < _len; _i++) {
-            pull_request = pull_requests[_i];
+          for (index = _i = 0, _len = pull_requests.length; _i < _len; index = ++_i) {
+            pull_request = pull_requests[index];
             _results.push(div(".pull-requests__request", function() {
-              return text(pull_request.title);
+              return text("" + (index + 1) + ") " + pull_request.title);
             }));
           }
           return _results;
@@ -46,7 +46,7 @@
         var url;
         url = "https://api.github.com/repos/";
         url += "" + dp.repo_owner + "/" + dp.repo_name + "/pulls";
-        url += "?access_token=" + dp.user_token;
+        url += "?access_token=" + dp.user_token + "&per_page=100";
         return $.ajax({
           url: url,
           type: "GET"

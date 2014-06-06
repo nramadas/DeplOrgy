@@ -9,9 +9,9 @@ define ["teacup", "jquery", "view"], (tc, $, {View}) ->
 
         pull_requests: renderable (pull_requests) ->
             div ".pull-requests", ->
-                for pull_request in pull_requests
+                for pull_request, index in pull_requests
                     div ".pull-requests__request", ->
-                        text pull_request.title
+                        text "#{index + 1}) #{pull_request.title}"
 
     # VIEW =====================================================================
     class View__Dashboard extends View
@@ -27,7 +27,7 @@ define ["teacup", "jquery", "view"], (tc, $, {View}) ->
         fetch_pull_requests: ->
             url = "https://api.github.com/repos/"
             url += "#{dp.repo_owner}/#{dp.repo_name}/pulls"
-            url += "?access_token=#{dp.user_token}"
+            url += "?access_token=#{dp.user_token}&per_page=100"
             return $.ajax
                 url: url
                 type: "GET"
