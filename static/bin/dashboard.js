@@ -33,6 +33,7 @@
 
       function View__Dashboard() {
         this.draw_pull_requests = __bind(this.draw_pull_requests, this);
+        history.pushState({}, "", "/dashboard");
         this.fetch_pull_requests().done(this.draw_pull_requests);
         return;
       }

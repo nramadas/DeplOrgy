@@ -16,6 +16,7 @@ define ["teacup", "jquery", "view"], (tc, $, {View}) ->
     # VIEW =====================================================================
     class View__Dashboard extends View
         constructor: ->
+            history.pushState({}, "", "/dashboard")
             @fetch_pull_requests().done(@draw_pull_requests)
             return
 

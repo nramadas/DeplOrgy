@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, redirect, request
+from flask import Flask, jsonify, render_template, redirect
 from flask.ext.github import GitHub
 
 app = Flask(__name__)
@@ -30,6 +30,10 @@ def gcb(oauth_token):
                            oauth_token=oauth_token,
                            repo_name=app.config['REPO_NAME'],
                            repo_owner=app.config['REPO_OWNER'])
+
+@app.route("/dashboard")
+def dashboard():
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run()
