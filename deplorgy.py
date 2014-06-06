@@ -1,28 +1,35 @@
-from flask import Flask, jsonify
-import urllib2
-import uuid
+from flask import Flask, jsonify, render_template, redirect, request
+from flask.ext.github import GitHub
+
 app = Flask(__name__)
-
-_globals = {
-    "g_client_id": "b8047c4fddfe18ac9cdf",
-    "g_client_secret": "ac45bd47f2cb9e7f04f1106c7ae35ec0229a6d3b",
-}
-
+app.debug = True
+app.config['GITHUB_CLIENT_ID'] = 'b8047c4fddfe18ac9cdf'
+app.config['GITHUB_CLIENT_SECRET'] = 'ac45bd47f2cb9e7f04f1106c7ae35ec0229a6d3b'
+app.config['GITHUB_CALLBACK_URL'] = 'http://127.0.0.1:5000/gcb'
+app.config['REPO_NAME'] = 'Hipmunk'
+app.config['REPO_OWNER'] = 'Hipmunk'
+github = GitHub(app)
 
 @app.route("/")
 def main():
-    return "Hello World"
+    return render_template("main.html")
 
 
-@app.route("/g")
-def g():
-    url = "https://github.com/login/oauth/authorize?"
-    url += "client_id={client_id}&".format(client_id=_globals['g_client_id'])
-    url += "redirect_uri={uri}&".format(uri="/dashboard")
-    url += "scope={scope}&".format(scope="")
-    url += "state={state}".format(state=str(uuid.uuid4().get_hex()))
-    return jsonify(url=url)
+@app.route("/login")
+def login():
+    return github.authorize(scope="repo")
 
+
+@app.route("/gcb")
+@github.authorized_handler
+def gcb(oauth_token):
+    if oauth_token is None:
+        return redirect("/")
+
+    return render_template("main.html",
+                           oauth_token=oauth_token,
+                           repo_name=app.config['REPO_NAME'],
+                           repo_owner=app.config['REPO_OWNER'])
 
 if __name__ == "__main__":
     app.run()
