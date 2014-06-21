@@ -35,5 +35,13 @@ def gcb(oauth_token):
 def dashboard():
     return redirect("/")
 
+@app.route("/navigation")
+def navigation():
+    return redirect("/")
+
+@app.route("/pullrequests")
+def pullrequests():
+    return redirect("/")
+
 if __name__ == "__main__":
     app.run()

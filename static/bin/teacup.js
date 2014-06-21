@@ -392,16 +392,7 @@
     _fn2(tagName);
   }
 
-  if (typeof module !== "undefined" && module !== null ? module.exports : void 0) {
-    module.exports = new Teacup().tags();
-    module.exports.Teacup = Teacup;
-  } else if (typeof define === 'function' && define.amd) {
-    define('teacup', [], function() {
-      return new Teacup().tags();
-    });
-  } else {
-    window.teacup = new Teacup().tags();
-    window.teacup.Teacup = Teacup;
-  }
+  window.teacup = new Teacup().tags();
+  window.teacup.Teacup = Teacup;
 
 }).call(this);

@@ -1,21 +1,21 @@
-define ["jquery"], ($) ->
-    class View
-        constructor: ->
-            @$el = null
-            return
+class View
+    constructor: ->
+        @$el = null
+        return
 
-        content: ->
-            if not @$el
-                @render()
-                @setup_handlers()
+    content: ->
+        if not @$el
+            @render()
+            @setup_handlers()
+            @post_setup()
 
-            return @$el
+        return @$el
 
-        render: ->
-            @$el = $("<div>")
-            return
+    render: ->
+        @$el = $("<div>")
+        return
 
-        setup_handlers: -> return
+    setup_handlers: -> return
+    post_setup: -> return
 
-    # EXPORT ===================================================================
-    return {View}
+define({View})

@@ -1,14 +1,18 @@
-define ["teacup", "jquery", "view"], (tc, $, {View}) ->
-    # TEMPLATES ================================================================
-    {div, text, renderable} = tc
+# TEMPLATES ====================================================================
+{div, text, renderable} = window.teacup
 
-    templates =
-        login: renderable ->
-            div ".login", ->
-                div ".login__button", ->
-                    text "Login"
+templates =
+    login: renderable ->
+        div ".login", ->
+            div ".login__title", ->
+                text "DeplOrgy"
+            div ".login__tagline", ->
+                text "The fastest, easiest way to manage pull requests"
+            div ".login__button", ->
+                text "Get Started"
 
-    # VIEW =====================================================================
+# VIEW =========================================================================
+define ["view"], ({View}) ->
     class View__Login extends View
         render: ->
             @$el = $(templates.login())
@@ -19,5 +23,4 @@ define ["teacup", "jquery", "view"], (tc, $, {View}) ->
                 window.location = "/login"
             return
 
-    # EXPORT ===================================================================
-    return {View__Login}
+    return View__Login
