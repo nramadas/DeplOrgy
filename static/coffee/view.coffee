@@ -1,4 +1,6 @@
 class View
+    url: "/"
+
     constructor: ->
         @$el = null
         return
