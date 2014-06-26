@@ -1,7 +1,19 @@
+$lightest_pink: #f8bbd0;
+$light_pink: #f48fb1;
+$pink: #e91e63;
+$dark_pink: #ad1457;
+$darkest_pink: #880e4f;
+
 body {
-    background-color: black;
     padding: 0;
     margin: 0;
+    font-family: "bettersans";
+    background: url("/static/images/crossword.png");
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
 }
 
 @font-face {
@@ -14,74 +26,34 @@ body {
     src: url("/static/fonts/stalemate.ttf");
 }
 
+@font-face {
+    font-family: "headers";
+    src: url("/static/fonts/poiret.ttf");
+}
+
+@font-face {
+    font-family: "bettersans";
+    src: url("/static/fonts/bettersans.ttf");
+}
+
 %text_overflow {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-$bright_blue: #A8D7E0;
-$medium_blue: #3D818F;
-$medium_brown: #8F703D;
-$medium_grey: #919191;
+%button_style {
+    border: 1px solid $lightest_pink;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.12);
+    &:hover { box-shadow: 0 3px 3px 0 rgba(0,0,0,.16); }
+}
 
-.login {
+%absolutely_centered {
     position: absolute;
-    left: 50%;
-    top: 100px;
-    margin-left: -40%;
-    height: 60%;
-    width: 80%;
-    border-radius: 10px;
-    background: url("/static/images/orgy.jpg");
-    background-size: cover;
-    box-shadow: 0 0 100px 50px black inset;
-
-    .login__title {
-        font-family: "stalemate";
-        font-size: 82px;
-        line-height: 82px;
-        margin-left: 80px;
-        margin-top: 80px;
-        color: $bright_blue;
-    }
-
-    .login__tagline {
-        position: absolute;
-        bottom: 80px;
-        left: 0;
-        padding: 10px 40px 10px 80px;
-        border-radius: 10px;
-        font-size: 14px;
-        line-height: 14px;
-        color: $medium_blue;
-        font-family: "curly";
-        background-color: black;
-        border-right: 2px solid $medium_blue;
-
-    }
-
-    .login__button {
-        position: absolute;
-        bottom: 130px;
-        left: 0;
-        padding: 20px 40px 10px 80px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-family: "curly";
-        font-size: 30px;
-        line-height: 30px;
-        color: $medium_blue;
-        background-color: black;
-        border-right: 2px solid $medium_blue;
-        -webkit-transition: all 0.03s ease-in;
-        -moz-transition: all 0.03s ease-in;
-        -o-transition: all 0.03s ease-in;
-
-        &:hover {
-            padding-left: 100px;
-        }
-    }
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .dashboard {
@@ -90,27 +62,74 @@ $medium_grey: #919191;
     bottom: 0;
     left: 0;
     right: 0;
-    background: url("/static/images/stardust.png");
 
     .dashboard__container {
-        position: absolute;
-        top: 100px;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        margin-top: 100px;
         overflow: scroll;
     }
 
     .dashboard__header {
-        background-color: black;
+        position: fixed;
+        background-color: $pink;
         height: 60px;
+        width: 100%;
         padding: 20px;
+        box-shadow: 0 3px 3px 0 rgba(0,0,0,.12);
 
         .dashboard__header-title {
-            color: $bright_blue;
+            color: white;
             font-family: "stalemate";
             font-size: 40px;
             line-height: 80px;
+        }
+    }
+}
+
+.login {
+    @extend %absolutely_centered;
+    background-color: black;
+
+    .login__content {
+        position: absolute;
+        left: 50%;
+        top: 100px;
+        margin-left: -40%;
+        height: 60%;
+        width: 80%;
+        border-radius: 10px;
+        background: url("/static/images/orgy.jpg");
+        background-size: cover;
+        box-shadow: 0 0 100px 50px black inset;
+    }
+
+    .login__title {
+        font-family: "stalemate";
+        font-size: 82px;
+        line-height: 82px;
+        margin-left: 80px;
+        margin-top: 80px;
+        color: $pink;
+    }
+
+    .login__button {
+        position: absolute;
+        bottom: 130px;
+        left: 0;
+        padding: 10px 40px 10px 80px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: "headers";
+        font-size: 30px;
+        line-height: 30px;
+        color: $dark_pink;
+        background-color: black;
+        border-right: 2px solid $dark_pink;
+        -webkit-transition: all 0.03s ease-in;
+        -moz-transition: all 0.03s ease-in;
+        -o-transition: all 0.03s ease-in;
+
+        &:hover {
+            padding-left: 100px;
         }
     }
 }
@@ -122,32 +141,28 @@ $medium_grey: #919191;
         padding: 20px 0;
         font-size: 42px;
         line-height: 42px;
-        color: $medium_blue;
-        font-family: "curly";
+        color: $dark_pink;
+        font-family: "headers";
     }
 
     .standard-view__subtitle {
         padding: 5px 0;
         font-size: 18px;
         line-height: 18px;
-        color: $medium_brown;
-        font-family: sans-serif;
+        font-weight: bold;
+        color: $darkest_pink;
     }
 }
 
 .navigation-item {
+    @extend %button_style;
     width: 25%;
     min-width: 200px;
     max-width: 400px;
     border-radius: 5px;
-    border-width: 3px;
-    border-style: solid;
     display: inline-block;
     cursor: pointer;
-
-    &:hover {
-        box-shadow: 0 0 20px 0 $medium_grey;
-    }
+    background-color: $lightest_pink;
 
     .navigation-item__useless-box,
     .navigation-item__content {
@@ -161,7 +176,7 @@ $medium_grey: #919191;
     .navigation-item__content {
         box-sizing: border-box;
         width: 90%;
-        padding: 5px;
+        padding: 5px 10px;
         border-radius: 3px;
         background-color: white;
     }
@@ -170,22 +185,21 @@ $medium_grey: #919191;
         @extend %text_overflow;
         font-size: 20px;
         line-height: 30px;
-        font-family: sans-serif;
+        color: $dark_pink
     }
 
     .navigation-item__text {
         font-size: 16px;
         line-height: 20px;
-        font-family: sans-serif;
+        color: $darkest_pink;
     }
 }
 
 .pull-request-list {
     .pull-request-list__request {
-        font-family: sans-serif;
         font-size: 16px;
         line-height: 24px;
-        color: $medium_grey;
+        color: black;
     }
 }
 

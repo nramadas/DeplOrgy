@@ -1,5 +1,6 @@
 class View
-    url: "/"
+    @url: "/"
+    @fullscreen: false
 
     constructor: ->
         @$el = null

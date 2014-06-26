@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, redirect
+from flask import Flask, jsonify, render_template, redirect, make_response
 from flask.ext.github import GitHub
 
 app = Flask(__name__)
@@ -26,22 +26,12 @@ def gcb(oauth_token):
     if oauth_token is None:
         return redirect("/")
 
-    return render_template("main.html",
-                           oauth_token=oauth_token,
-                           repo_name=app.config['REPO_NAME'],
-                           repo_owner=app.config['REPO_OWNER'])
+    resp = make_response(render_template("main.html"))
+    resp.set_cookie("user_auth_token", oauth_token)
+    resp.set_cookie("user_repo", app.config['REPO_NAME'])
+    resp.set_cookie("user_repo_owner", app.config['REPO_OWNER'])
+    return resp
 
-@app.route("/dashboard")
-def dashboard():
-    return redirect("/")
-
-@app.route("/navigation")
-def navigation():
-    return redirect("/")
-
-@app.route("/pullrequests")
-def pullrequests():
-    return redirect("/")
 
 if __name__ == "__main__":
     app.run()

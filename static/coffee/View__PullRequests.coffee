@@ -18,6 +18,7 @@ templates =
 # VIEW =========================================================================
 define ["view"], ({View}) ->
     class View__PullRequests extends View
+        @url = "/#pullrequests"
         @DND_RE = /\[dnd\]/i
         @REVIEWED_RE = /\[([^}]+)\]/i
         @TYPE_MAP = {
@@ -37,8 +38,6 @@ define ["view"], ({View}) ->
 
             $.when(@fetch_organization_members(), @fetch_pull_requests())
                 .done(@organize_data)
-
-            CDB.broadcast("request_url_change", "/pullrequests")
             return
 
         render: ->
@@ -47,16 +46,16 @@ define ["view"], ({View}) ->
 
         fetch_organization_members: ->
             url = "https://api.github.com/orgs/"
-            url += "#{dp.repo_owner}/members"
-            url += "?access_token=#{dp.user_token}&per_page=100"
+            url += "#{$.cookie('user_repo_owner')}/members"
+            url += "?access_token=#{$.cookie('user_auth_token')}&per_page=100"
             return $.ajax
                 url: url
                 type: "GET"
 
         fetch_pull_requests: ->
             url = "https://api.github.com/repos/"
-            url += "#{dp.repo_owner}/#{dp.repo_name}/pulls"
-            url += "?access_token=#{dp.user_token}&per_page=100"
+            url += "#{$.cookie('user_repo_owner')}/#{$.cookie('user_repo')}/pulls"
+            url += "?access_token=#{$.cookie('user_auth_token')}&per_page=100"
             return $.ajax
                 url: url
                 type: "GET"

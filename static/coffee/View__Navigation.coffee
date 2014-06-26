@@ -2,21 +2,9 @@
 {div, text, renderable} = window.teacup
 
 templates =
-    navigation_item: renderable ({view_filename, title, msg}) ->
-        random_color_num = ->
-            return Math.floor((Math.random() * 100) + 50)
-
-        random_color = ->
-            color1 = random_color_num()
-            color2 = random_color_num()
-            color3 = random_color_num()
-            return "rgb(#{color1},#{color2},#{color3})"
-
-        color = random_color()
-
+    navigation_item: renderable ({viewname, title, msg}) ->
         item_attrs =
-            view_filename: view_filename
-            style: "background-color: #{color}; border-color: #{color}"
+            viewname: viewname
 
         div ".navigation-item", item_attrs, ->
             div ".navigation-item__useless-box"
@@ -36,15 +24,13 @@ define ["view"], ({View}) ->
     class View__Navigation extends View
         @NAVABLE_VIEWS = [
             {
-                view_filename: "pullrequests",
+                viewname: "View__PullRequests",
                 title: "Pull Requests",
                 msg: "Manage and review pull requests"
             }
         ]
 
-        constructor: ->
-            CDB.broadcast("request_url_change", "/navigation")
-            return
+        @url: "/#navigation"
 
         render: ->
             @$el = $(templates.navigation())
@@ -58,8 +44,8 @@ define ["view"], ({View}) ->
         setup_handlers: ->
             @$el.on "click", ".navigation-item", (e) ->
                 $nav_item = $(e.currentTarget)
-                view_filename = $nav_item.attr("view_filename")
-                CDB.broadcast("request_view_change", view_filename)
+                viewname = $nav_item.attr("viewname")
+                CDB.broadcast("request_view_change", viewname)
                 return
             return
 

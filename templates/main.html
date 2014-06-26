@@ -3,21 +3,10 @@
 <head>
     <script data-main="/static/bin/main.js" src="/static/bin/require.js"></script>
     <script src="/static/bin/jquery.js"></script>
+    <script src="/static/bin/jquery.cookie.js"></script>
     <script src="/static/bin/teacup.js"></script>
     <script src="/static/bin/CDB.js"></script>
     <link rel="stylesheet" href="/static/styles/main.css">
 </head>
 <body>
-<script>
-    window.dp = {}
-    {% if oauth_token %}
-    window.dp.user_token = "{{ oauth_token }}"
-    {% endif %}
-    {% if repo_name %}
-    window.dp.repo_name = "{{ repo_name }}"
-    {% endif %}
-    {% if repo_owner %}
-    window.dp.repo_owner = "{{ repo_owner }}"
-    {% endif %}
-</script>
 </body>
