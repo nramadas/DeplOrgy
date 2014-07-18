@@ -4,10 +4,13 @@ $pink: #e91e63;
 $dark_pink: #ad1457;
 $darkest_pink: #880e4f;
 
+$red_bg: #FFD4D4;
+$green_bg: rgba(100, 228, 77, 0.5);
+
 body {
     padding: 0;
     margin: 0;
-    font-family: "bettersans";
+    font-family: "raleway";
     background: url("/static/images/crossword.png");
 }
 
@@ -36,6 +39,16 @@ a {
     src: url("/static/fonts/bettersans.ttf");
 }
 
+@font-face {
+    font-family: "raleway";
+    src: url("/static/fonts/Raleway.ttf");
+}
+
+@font-face {
+    font-family: "inconsolata";
+    src: url("/static/fonts/inconsolata.otf");
+}
+
 %text_overflow {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -56,6 +69,12 @@ a {
     bottom: 0;
 }
 
+%borderbox {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
 .dashboard {
     position: absolute;
     top: 0;
@@ -65,7 +84,6 @@ a {
 
     .dashboard__container {
         margin-top: 100px;
-        overflow: scroll;
     }
 
     .dashboard__header {
@@ -74,7 +92,7 @@ a {
         height: 60px;
         width: 100%;
         padding: 20px;
-        box-shadow: 0 3px 3px 0 rgba(0,0,0,.12);
+        box-shadow: 0 3px 3px 0 rgba(0,0,0,.24);
 
         .dashboard__header-title {
             color: white;
@@ -142,15 +160,17 @@ a {
         font-size: 42px;
         line-height: 42px;
         color: $dark_pink;
-        font-family: "headers";
+        font-family: "bettersans";
     }
 
     .standard-view__subtitle {
         padding: 5px 0;
-        font-size: 18px;
-        line-height: 18px;
+        font-size: 24px;
+        line-height: 24px;
+        height: 24px;
         font-weight: bold;
         color: $darkest_pink;
+        font-family: "bettersans";
     }
 }
 
@@ -197,9 +217,81 @@ a {
 
 .pull-request-list {
     .pull-request-list__request {
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 14px;
+        line-height: 21px;
         color: black;
+        cursor: pointer;
+
+        &:hover {
+            color: $light_pink;
+        }
+    }
+}
+
+.diff-fn-line {
+    @extend %text_overflow;
+    font-family: "inconsolata";
+    width: 100%;
+    height: 18px;
+
+    &.m-lhs {
+        .diff-fn-line__content {
+            background-color: $red_bg;
+        }
+    }
+
+    &.m-rhs {
+        .diff-fn-line__content {
+            background-color: $green_bg;
+        }
+    }
+
+    .diff-fn-line__line-num,
+    .diff-fn-line__content {
+        @extend %borderbox;
+        @extend %text_overflow;
+        font-size: 14px;
+        line-height: 18px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .diff-fn-line__line-num {
+        width: 8%;
+        padding-right: 5px;
+        border-right: 1px solid $light_pink;
+        text-align: right;
+    }
+
+    .diff-fn-line__content {
+        width: 92%;
+        padding-left: 5px;
+    }
+}
+
+.diff-fn {
+    .diff-fn__title {
+        padding: 20px 0 10px 0;
+        margin-bottom: 10px;
+        // border-bottom: 1px solid $light_pink;
+    }
+
+    .diff-fn__lhs,
+    .diff-fn__rhs {
+        display: inline-block;
+        vertical-align: top;
+        width: 50%;
+    }
+}
+
+.diff-file {
+    .diff-file__comparison {
+        @extend %text_overflow;
+        width: 100%;
+    }
+
+    .diff-file__fn-container {
+        border: 1px solid $light_pink;
     }
 }
 

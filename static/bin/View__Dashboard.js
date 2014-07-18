@@ -57,7 +57,9 @@
           view = _ref1[re];
           regexp = new RegExp(re);
           if (regexp.test(hash)) {
-            CDB.broadcast("request_view_change", view, false);
+            CDB.broadcast("request_view_change", view, {
+              push_url: false
+            });
             return;
           }
         }
@@ -69,12 +71,21 @@
         CDB.listen("request_url_change", function(url) {
           history.pushState({}, "", url);
         });
-        CDB.listen("request_view_change", function(view_name, push_url) {
+        CDB.listen("request_view_change", function(view_name, _arg1) {
+          var push_url, view_args, _ref1;
+          _ref1 = _arg1 != null ? _arg1 : {}, push_url = _ref1.push_url, view_args = _ref1.view_args;
           if (push_url == null) {
             push_url = true;
           }
+          if (view_args == null) {
+            view_args = [];
+          }
           require([view_name], function(view_klass) {
-            _this.$container.html(new view_klass().content());
+            _this.$container.html((function(func, args, ctor) {
+              ctor.prototype = func.prototype;
+              var child = new ctor, result = func.apply(child, args);
+              return Object(result) === result ? result : child;
+            })(view_klass, view_args, function(){}).content());
             _this.toggle_header(!view_klass.fullscreen);
             if (push_url) {
               history.pushState({}, "", view_klass.url);

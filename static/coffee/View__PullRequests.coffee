@@ -12,7 +12,8 @@ templates =
         div ".pull-request-list.standard-view", ->
             div ".pull-request-list__title.standard-view__subtitle", type
             for pull_request, index in pull_requests
-                div ".pull-request-list__request", ->
+                {url} = pull_request
+                div ".pull-request-list__request", {url}, ->
                     text "#{index + 1}) #{pull_request.title}"
 
 # VIEW =========================================================================
@@ -21,6 +22,7 @@ define ["view"], ({View}) ->
         @url = "/#pullrequests"
         @DND_RE = /\[dnd\]/i
         @REVIEWED_RE = /\[([^}]+)\]/i
+        @TICKET_RE = /HIP/
         @TYPE_MAP = {
             dnd: "Do NOT deploy these:"
             reviewed: "Ready for deploy:"
@@ -44,6 +46,16 @@ define ["view"], ({View}) ->
             @$el = $(templates.container())
             return
 
+        setup_handlers: ->
+            @$el.on "click", ".pull-request-list__request", (e) =>
+                $pr = $(e.currentTarget)
+                url = $pr.attr("url")
+                @fetch_diff(url).done (diff_content) =>
+                    CDB.broadcast "request_view_change", "View__Diff",
+                        view_args: [diff_content]
+                return
+            return
+
         fetch_organization_members: ->
             url = "https://api.github.com/orgs/"
             url += "#{$.cookie('user_repo_owner')}/members"
@@ -60,13 +72,16 @@ define ["view"], ({View}) ->
                 url: url
                 type: "GET"
 
+        fetch_diff: (url) ->
+            url += "?access_token=#{$.cookie('user_auth_token')}"
+            return $.ajax
+                url: url
+                headers: {Accept: "application/vnd.github.diff"}
+                type: "GET"
+
         organize_data: (members, requests) =>
-            console.log "MEMBERS:", members
-            console.log "REQUESTS:", requests
             @organize_members(members[0])
             @organize_pull_requests(requests[0])
-
-            console.log @organized_requests
 
             for type, request_list of @organized_requests
                 @draw_pull_requests(View__PullRequests.TYPE_MAP[type],
@@ -79,14 +94,19 @@ define ["view"], ({View}) ->
             return
 
         organize_pull_requests: (requests) ->
+            {DND_RE, REVIEWED_RE, TICKET_RE} = View__PullRequests
+
+            console.log "REQUESTS:", requests
+
             for request in requests
                 title = request.title
-                if View__PullRequests.DND_RE.test(title)
+                if DND_RE.test(title)
                     @organized_requests.dnd.push(request)
                 else
-                    bracket_content = View__PullRequests.REVIEWED_RE.exec(title)
+                    bracket_content = REVIEWED_RE.exec(title)
+                    is_ticket = TICKET_RE.test(bracket_content?[1])
 
-                    if bracket_content?[1] in @organization_members
+                    if bracket_content and not is_ticket
                         @organized_requests.reviewed.push(request)
                     else
                         @organized_requests.other.push(request)

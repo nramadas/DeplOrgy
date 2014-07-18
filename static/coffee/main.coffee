@@ -1,3 +1,5 @@
+window.parse_int = (n) -> return parseInt(n, 10)
+
 requirejs.config
     baseUrl: "/static/bin"
 

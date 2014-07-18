@@ -37,7 +37,7 @@ define ["View", "View__Navigation"], ({View}, View__Navigation) ->
                 regexp = new RegExp(re)
 
                 if regexp.test(hash)
-                    CDB.broadcast("request_view_change", view, false)
+                    CDB.broadcast("request_view_change", view, push_url: false)
                     return
 
             # Fallback
@@ -49,9 +49,12 @@ define ["View", "View__Navigation"], ({View}, View__Navigation) ->
                 history.pushState({}, "", url)
                 return
 
-            CDB.listen "request_view_change", (view_name, push_url=true) =>
+            CDB.listen "request_view_change", (view_name, {push_url, view_args}={}) =>
+                push_url ?= true
+                view_args ?= []
+
                 require [view_name], (view_klass) =>
-                    @$container.html(new view_klass().content())
+                    @$container.html(new view_klass(view_args...).content())
                     @toggle_header(not view_klass.fullscreen)
                     if push_url
                         history.pushState({}, "", view_klass.url)
